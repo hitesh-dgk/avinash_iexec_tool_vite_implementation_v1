@@ -1,0 +1,13 @@
+
+.web3mail-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    .cta-button {
+        position: absolute;
+        top: 30px;
+        right: 50px;
+    }
+}
