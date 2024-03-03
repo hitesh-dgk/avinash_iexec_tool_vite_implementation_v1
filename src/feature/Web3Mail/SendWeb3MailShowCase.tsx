@@ -25,22 +25,15 @@ const SendWeb3MailShowCase = (props: any) => {
     const [grantAccessTiggered, setGrantAccessTriggered] = useState<boolean>(false);
     const [selectedUserProtectDataTagValue,setSelectedUserProtectDataTagValue ] = useState<any>("");
 
-
-
-    console.log("SendWeb3MailShowCase props")
-    console.log(props)
-
     const fetchAllUserProtectedData = async () => {
         setLoadingUserProtectedData(true)
         const protectDataList = await listProtectedData(connectors[0], account.address)
-        console.log("protectDataList ", protectDataList)
         if (protectDataList.length > 0) {
             const protectedEmails: any = protectDataList.filter(item => item.schema.hasOwnProperty("People_Plus_Local_App"));
             if (!protectedEmails) {
                 console.warn(`Web3MailProvider ----  - User ${account.address} has no protected email`);
                 return null;
             }
-            console.log("protectedEmails", protectedEmails)
             setOwnerProtectedData(protectedEmails)
         }
         setLoadingUserProtectedData(false);
@@ -48,10 +41,7 @@ const SendWeb3MailShowCase = (props: any) => {
 
     const getherProtectedUserDataAccess = async () => {
         setGrantAccessTriggered(true)
-        console.log("connectors[0], selectedUserProtectedData, account.address")
-        console.log(connectors[0], selectedUserProtectedData.address, account.address)
         const grantedAccessesResult: any = await listGrantedAccess(connectors[0], selectedUserProtectedData.address, account.address)
-        console.log("grantedAccessesResult: ", grantedAccessesResult)
         if (grantedAccessesResult.count == 0) {
             const grantAccessResult = await grantAccess(connectors[0], selectedUserProtectedData.address, account.address)
             setUserGrantedAccess(grantAccessResult)
@@ -64,7 +54,6 @@ const SendWeb3MailShowCase = (props: any) => {
 
     useEffect(() => {
         (async () => {
-            console.log("selectedUserProtectedData: ", selectedUserProtectedData)
             if (selectedUserProtectedData) {
                 setUserGrantedAccess(null)
                 setLoadingUserProtectedData(false)
@@ -96,9 +85,6 @@ const SendWeb3MailShowCase = (props: any) => {
             emailSubject: subject,
             emailContent: content,
         });
-
-        console.log("sendEmail: ", sendEmail)
-
         setSubject("")
         setContent("")
         setMailSet(true)
@@ -109,8 +95,6 @@ const SendWeb3MailShowCase = (props: any) => {
         console.log(e.target.value)
         let dataSet = ownerProtectedData.filter((data: any) => data.address === e.target.value)
         setSelectedUserProtectDataTagValue(e.target.value)
-        console.log("dataSet")
-        console.log(dataSet)
         setSelectedUserProtectedData(dataSet[0])
     }
 

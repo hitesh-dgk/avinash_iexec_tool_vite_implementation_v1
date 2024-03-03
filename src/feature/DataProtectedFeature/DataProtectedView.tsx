@@ -23,14 +23,11 @@ const DataProtectedView = (props: any) => {
     const fetchAllUserProtectedData = async () => {
         setLoadingUserProtectedData(true)
         const protectDataList = await listProtectedData(connectors[0], account.address)
-        console.log("protectDataList ", protectDataList)
         if (protectDataList.length > 0) {
             const protectedEmails: any = protectDataList.filter(item => item.schema.hasOwnProperty("People_Plus_Local_App"));
             if (!protectedEmails) {
-                console.warn(`Web3MailProvider ----  - User ${account.address} has no protected email`);
                 return null;
             }
-            console.log("protectedEmails", protectedEmails)
             setOwnerProtectedData(protectedEmails)
         }
         setLoadingUserProtectedData(false);
@@ -39,26 +36,15 @@ const DataProtectedView = (props: any) => {
 
     useEffect(() => {
         (async () => {
-            console.log("run only once")
-            console.log(fetchAllUserProtectedData())
+            await fetchAllUserProtectedData()
         })();
     }, [])
 
     const onSubmitHandler = async (e: any) => {
         e.preventDefault();
         setSubmitState(true)
-        console.log("submit")
-        // const data: DataSchema = { email: userEmail } as DataSchema;
         let data: DataObject = { email: userEmail, "People_Plus_Local_App": true }
-
         const result: any = await protectData(connectors[0], data, userName)
-        console.log("result: ", result)
-        console.log("length: ", result.length)
-        // if(result.length > 0) {
-        //     const grantedAccesses = await listGrantedAccess(connectors[0], result[0].address)
-        // }
-
-        // props.onSuccess()
         setUserEmail("")
         setUserName("")
         setSubmitState(false);
